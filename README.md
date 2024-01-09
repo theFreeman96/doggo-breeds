@@ -16,10 +16,12 @@ A cross-platform app created for a Flutter-Challange and for doggos' lovers arou
 - Variable random images number;
 - Display images randomly selected by breed;
 - Display images randomly selected by sub-breed;
+- Documentation;
 - Favorites doggos' images.
 
 ## Coming soon
 
+- Testing;
 - Dark theme;
 - Landscape mode;
 - Fully functional web support;
