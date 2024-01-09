@@ -22,10 +22,11 @@ A cross-platform app created for a Flutter-Challange and for doggos' lovers arou
 
 - Dark theme;
 - Landscape mode;
-- Fully functional web support.
+- Fully functional web support;
+- Desktop support.
 
 ## Platform Support
 
-Mobile:
 - Android;
-- iOS.
+- iOS;
+- Web.
