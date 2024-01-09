@@ -83,7 +83,7 @@ class _AllDoggosPageState extends State<AllDoggosPage> {
                     height: 100,
                   ),
                 ),
-                _buildDropdownsColumn(),
+                buildDropdownsColumn(),
               ],
             ),
           ),
@@ -110,7 +110,7 @@ class _AllDoggosPageState extends State<AllDoggosPage> {
     );
   }
 
-  Widget _buildDropdownsColumn() {
+  Widget buildDropdownsColumn() {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
