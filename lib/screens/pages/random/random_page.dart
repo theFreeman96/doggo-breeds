@@ -1,10 +1,12 @@
-import 'package:doggo_breeds/data/fetch_random_from_collection.dart';
 import 'package:flutter/material.dart';
+
+import '/data/fetch_random_from_collection.dart';
 
 import '/utilities/constants.dart';
 
 import '/screens/images/images_grid.dart';
 import '/screens/images/image_detail.dart';
+import 'numeric_input.dart';
 
 class RandomPage extends StatefulWidget {
   const RandomPage({super.key});
@@ -14,6 +16,13 @@ class RandomPage extends StatefulWidget {
 }
 
 class _RandomPageState extends State<RandomPage> {
+  late String filterHint;
+  final List filterList = [
+    'No filter',
+    'By breed',
+    'By sub-breed',
+  ];
+
   bool isFromCollection = false;
   bool isByBreed = false;
   bool isBySubBreed = false;
@@ -21,6 +30,7 @@ class _RandomPageState extends State<RandomPage> {
 
   @override
   void initState() {
+    filterHint = 'No filter';
     super.initState();
   }
 
@@ -55,7 +65,42 @@ class _RandomPageState extends State<RandomPage> {
                     height: 100,
                   ),
                 ),
-                _buildButtonsColumn(),
+                Expanded(
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        items:
+                            filterList.map<DropdownMenuItem<String>>((value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        hint: Text(filterHint),
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: kDefaultPadding,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.filter_list_alt,
+                            color: kGrey,
+                          ),
+                          labelText: 'Random filter',
+                          alignLabelWithHint: true,
+                        ),
+                        icon: const Icon(Icons.arrow_drop_down),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: kDefaultPadding),
+                        child: NumericInput(),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -77,50 +122,6 @@ class _RandomPageState extends State<RandomPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildButtonsColumn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ElevatedButton.icon(
-          icon: const Icon(Icons.shuffle),
-          label: const Text('From Collection'),
-          onPressed: () {
-            setState(() {
-              isFromCollection = true;
-              isByBreed = false;
-              isBySubBreed = false;
-            });
-            updateImages();
-          },
-        ),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.pets),
-          label: const Text('By Breed'),
-          onPressed: () {
-            setState(() {
-              isFromCollection = false;
-              isByBreed = true;
-              isBySubBreed = false;
-            });
-            updateImages();
-          },
-        ),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.sell),
-          label: const Text('By Sub-breed'),
-          onPressed: () {
-            setState(() {
-              isFromCollection = false;
-              isByBreed = false;
-              isBySubBreed = true;
-            });
-            updateImages();
-          },
-        ),
-      ],
     );
   }
 }
