@@ -33,8 +33,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.title, style: TextStyle(fontWeight: FontWeight.w900)),
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontWeight: FontWeight.w900),
+        ),
       ),
       body: pageBodies[currentIndex],
       bottomNavigationBar: HomeNavBar(
