@@ -1,16 +1,31 @@
-# doggo_breeds
+# DoggoBreeds
 
-The paw-sitively best way to learn about doggo breeds.
+<img width="150" alt="logo" src="https://github.com/theFreeman96/doggo-breeds/assets/90036768/5eb75196-b7b8-4126-9b59-1b16a18733ed">
 
-## Getting Started
+*The paw-sitively best way to learn about doggo breeds.*
 
-This project is a starting point for a Flutter application.
+A cross-platform app created for a Flutter-Challange and for doggos' lovers around the world.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Show doggos' images by breed and sub-breed.
+- Display images randomly selected from the entire doggos' collection.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Currently working on...
+
+- Variable random images number;
+- Display images randomly selected by breed;
+- Display images randomly selected by sub-breed;
+- Favorites doggos' images.
+
+## Coming soon
+
+- Dark theme;
+- Landscape mode;
+- Fully functional web support.
+
+## Platform Support
+
+Mobile:
+- Android;
+- iOS.
