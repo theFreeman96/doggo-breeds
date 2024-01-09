@@ -12,13 +12,14 @@ class NumericInput extends StatefulWidget {
 class NumericInputState extends State<NumericInput> {
   late TextEditingController controller;
   int minValue = 1;
+  int defValue = 6;
   int maxValue = 50;
 
   @override
   void initState() {
     super.initState();
     controller = TextEditingController();
-    controller.text = minValue.toString();
+    controller.text = defValue.toString();
   }
 
   @override
