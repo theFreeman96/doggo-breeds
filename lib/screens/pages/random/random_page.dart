@@ -78,7 +78,12 @@ class _RandomPageState extends State<RandomPage> {
                           );
                         }).toList(),
                         onChanged: (value) {
-                          setState(() {});
+                          setState(() {
+                            isFromCollection = true;
+                            isByBreed = false;
+                            isBySubBreed = false;
+                          });
+                          updateImages();
                         },
                         hint: Text(filterHint),
                         decoration: const InputDecoration(
