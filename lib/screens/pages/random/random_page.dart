@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '/data/fetch_random_from_collection.dart';
+import '/data/fetch_by_breed.dart';
+import '/data/fetch_by_sub_breed.dart';
 
 import '/utilities/constants.dart';
 import '/utilities/string_utils.dart';
@@ -8,6 +10,7 @@ import '/utilities/string_utils.dart';
 import '/screens/images/images_grid.dart';
 import '/screens/images/image_detail.dart';
 import 'numeric_input.dart';
+import 'random_dropdown.dart';
 
 class RandomPage extends StatefulWidget {
   const RandomPage({super.key});
@@ -17,9 +20,8 @@ class RandomPage extends StatefulWidget {
 }
 
 class _RandomPageState extends State<RandomPage> {
-  late String filterHint;
   final List filterList = [
-    'No filter',
+    'All collection',
     'By breed',
     'By sub-breed',
   ];
@@ -27,18 +29,46 @@ class _RandomPageState extends State<RandomPage> {
   bool isFromCollection = false;
   bool isByBreed = false;
   bool isBySubBreed = false;
+
+  String? randomBreed;
+  String? randomSubBreed;
   List<String>? images;
+
+  NumericInputState? numericInputState;
 
   @override
   void initState() {
-    filterHint = 'No filter';
     super.initState();
   }
 
   Future<void> updateImages() async {
-    if (isFromCollection == true) {
+    int currentNumber = numericInputState?.getCurrentValue() ?? 6;
+    randomBreed = await FetchRandomFromCollection().getRandomBreed();
+    randomSubBreed = await FetchRandomFromCollection()
+        .getRandomSubBreed(randomBreed!.toLowerCase());
+
+    if (isFromCollection) {
       final List<String>? imageString =
-          await FetchRandomFromCollection().getRandomImages(6);
+          await FetchRandomFromCollection().getRandomImages(currentNumber);
+      setState(() {
+        images = imageString;
+      });
+    } else if (isByBreed) {
+      final List<String>? imageString =
+          await FetchByBreed().getRandomImagesByBreed(
+        randomBreed!.toLowerCase(),
+        currentNumber,
+      );
+      setState(() {
+        images = imageString;
+      });
+    } else if (isBySubBreed) {
+      final List<String>? imageString =
+          await FetchBySubBreed().getRandomImagesBySubBreed(
+        randomBreed!.toLowerCase(),
+        randomSubBreed!.toLowerCase(),
+        currentNumber,
+      );
       setState(() {
         images = imageString;
       });
@@ -69,41 +99,46 @@ class _RandomPageState extends State<RandomPage> {
                 Expanded(
                   child: Column(
                     children: [
-                      DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        items:
-                            filterList.map<DropdownMenuItem<String>>((value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            isFromCollection = true;
-                            isByBreed = false;
-                            isBySubBreed = false;
-                          });
-                          updateImages();
-                        },
-                        hint: Text(filterHint),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: kDefaultPadding,
+                      RandomDropdown(
+                          filterList: filterList,
+                          onChanged: (value) {
+                            setState(() {
+                              randomBreed = null;
+                              randomSubBreed = null;
+
+                              if (value == filterList[0]) {
+                                isFromCollection = true;
+                                isByBreed = false;
+                                isBySubBreed = false;
+                              } else if (value == filterList[1]) {
+                                isFromCollection = false;
+                                isByBreed = true;
+                                isBySubBreed = false;
+                              } else if (value == filterList[2]) {
+                                isFromCollection = false;
+                                isByBreed = false;
+                                isBySubBreed = true;
+                              } else {
+                                isFromCollection = false;
+                                isByBreed = false;
+                                isBySubBreed = false;
+                                images = null;
+                              }
+                            });
+                            updateImages();
+                          }),
+                      if (isFromCollection == true ||
+                          isByBreed == true ||
+                          isBySubBreed == true)
+                        Padding(
+                          padding: const EdgeInsets.only(top: kDefaultPadding),
+                          child: NumericInput(
+                            onUpdate: updateImages,
+                            onInit: (state) {
+                              numericInputState = state;
+                            },
                           ),
-                          prefixIcon: Icon(
-                            Icons.filter_list_alt,
-                            color: kGrey,
-                          ),
-                          labelText: 'Random filter',
-                          alignLabelWithHint: true,
                         ),
-                        icon: const Icon(Icons.arrow_drop_down),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: kDefaultPadding),
-                        child: NumericInput(),
-                      ),
                     ],
                   ),
                 ),

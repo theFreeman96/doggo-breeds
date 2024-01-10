@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '/utilities/constants.dart';
 
 class NumericInput extends StatefulWidget {
-  const NumericInput({super.key});
+  const NumericInput({super.key, required this.onInit, required this.onUpdate});
+
+  final Function(NumericInputState state) onInit;
+  final VoidCallback onUpdate;
 
   @override
   NumericInputState createState() => NumericInputState();
@@ -20,30 +23,25 @@ class NumericInputState extends State<NumericInput> {
     super.initState();
     controller = TextEditingController();
     controller.text = defValue.toString();
+    widget.onInit(this);
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: kDefaultPadding * 12,
+        width: kDefaultPadding * 15,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.remove),
-              onPressed: () {
-                decrementValue();
-              },
-            ),
             Expanded(
               child: TextField(
                 controller: controller,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  _validateInput(value);
+                  validateInput(value);
                 },
                 decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
@@ -53,15 +51,29 @@ class NumericInputState extends State<NumericInput> {
                     Icons.numbers,
                     color: kGrey,
                   ),
-                  labelText: 'How much?',
+                  labelText: 'Number',
                   alignLabelWithHint: true,
                 ),
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(
+                Icons.add_circle,
+                color: kGrey,
+              ),
               onPressed: () {
                 incrementValue();
+                widget.onUpdate();
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.remove_circle,
+                color: kGrey,
+              ),
+              onPressed: () {
+                decrementValue();
+                widget.onUpdate();
               },
             ),
           ],
@@ -70,7 +82,11 @@ class NumericInputState extends State<NumericInput> {
     );
   }
 
-  void _validateInput(String value) {
+  int getCurrentValue() {
+    return int.parse(controller.text);
+  }
+
+  void validateInput(String value) {
     try {
       int intValue = int.parse(value);
 

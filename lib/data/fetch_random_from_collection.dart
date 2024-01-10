@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
+
+import '/data/fetch_breed_list.dart';
 
 class FetchRandomFromCollection {
   Future<String?> getRandomImage() async {
@@ -33,5 +36,39 @@ class FetchRandomFromCollection {
     } else {
       throw Exception('Failed to load random images');
     }
+  }
+
+  Future<String?> getRandomBreed() async {
+    final breedList = await FetchBreedList().getAllBreeds();
+
+    if (breedList!.isNotEmpty) {
+      final randomBreed = breedList[Random().nextInt(breedList.length)];
+      return randomBreed;
+    } else {
+      throw Exception('Failed to load random breed');
+    }
+  }
+
+  Future<String?> getRandomSubBreed(randomBreed) async {
+    if (randomBreed != null) {
+      final response = await http.get(
+        Uri.parse('https://dog.ceo/api/breed/$randomBreed/list'),
+      );
+
+      if (response.statusCode == 200) {
+        final subBreedsJson = jsonDecode(response.body)['message'];
+
+        if (subBreedsJson is List) {
+          final subBreedsList = subBreedsJson.cast<String>();
+
+          if (subBreedsList.isNotEmpty) {
+            final randomSubBreed =
+                subBreedsList[Random().nextInt(subBreedsList.length)];
+            return randomSubBreed;
+          }
+        }
+      }
+    }
+    return null;
   }
 }
