@@ -5,6 +5,7 @@ import '/data/fetch_by_breed.dart';
 import '/data/fetch_by_sub_breed.dart';
 
 import '/utilities/constants.dart';
+import '/utilities/string_utils.dart';
 
 import 'breed_dropdown.dart';
 import 'sub_breed_dropdown.dart';
@@ -95,8 +96,12 @@ class _AllDoggosPageState extends State<AllDoggosPage> {
                 MaterialPageRoute(
                   builder: (context) {
                     return ImageDetail(
-                      breed: selectedBreed!,
-                      subBreed: selectedSubBreed,
+                      breed: capitalizeString(
+                        Uri.parse(
+                          images![index],
+                        ).pathSegments[1],
+                        '-',
+                      ),
                       initialIndex: index,
                       images: images!,
                     );

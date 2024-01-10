@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '/utilities/string_utils.dart';
+
 class FetchBreedList {
   Future<List<String>?> getAllBreeds() async {
     final response = await http.get(
@@ -13,10 +15,7 @@ class FetchBreedList {
       List<String> breedList = [];
 
       breedsJson.forEach((key, value) {
-        String capitalizedBreed = key.split(' ').map((word) {
-          return word[0].toUpperCase() + word.substring(1);
-        }).join(' ');
-
+        String capitalizedBreed = capitalizeString(key, ' ');
         breedList.add(capitalizedBreed);
       });
 

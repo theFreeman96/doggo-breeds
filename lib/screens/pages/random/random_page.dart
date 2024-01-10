@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '/data/fetch_random_from_collection.dart';
 
 import '/utilities/constants.dart';
+import '/utilities/string_utils.dart';
 
 import '/screens/images/images_grid.dart';
 import '/screens/images/image_detail.dart';
@@ -117,6 +118,12 @@ class _RandomPageState extends State<RandomPage> {
                 MaterialPageRoute(
                   builder: (context) {
                     return ImageDetail(
+                      breed: capitalizeString(
+                        Uri.parse(
+                          images![index],
+                        ).pathSegments[1],
+                        '-',
+                      ),
                       initialIndex: index,
                       images: images!,
                     );
