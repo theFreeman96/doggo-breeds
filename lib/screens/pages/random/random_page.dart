@@ -63,15 +63,23 @@ class _RandomPageState extends State<RandomPage> {
         images = imageString;
       });
     } else if (isBySubBreed) {
-      final List<String>? imageString =
-          await FetchBySubBreed().getRandomImagesBySubBreed(
-        randomBreed!.toLowerCase(),
-        randomSubBreed!.toLowerCase(),
-        currentNumber,
-      );
-      setState(() {
-        images = imageString;
-      });
+      do {
+        randomBreed = await FetchRandomFromCollection().getRandomBreed();
+        randomSubBreed = await FetchRandomFromCollection()
+            .getRandomSubBreed(randomBreed!.toLowerCase());
+      } while (randomSubBreed == null);
+
+      if (randomSubBreed != null) {
+        final List<String>? imageString =
+            await FetchBySubBreed().getRandomImagesBySubBreed(
+          randomBreed!.toLowerCase(),
+          randomSubBreed,
+          currentNumber,
+        );
+        setState(() {
+          images = imageString;
+        });
+      }
     }
   }
 
